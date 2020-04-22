@@ -1,0 +1,2 @@
+# alphabet
+Greek alphabet CLI.
