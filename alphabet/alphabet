@@ -1,0 +1,75 @@
+#! /usr/bin/env python3
+import argparse
+import sys
+
+english_name = [
+    'alpha', 'beta', 'gamma', 'delta', 'epsilon',
+    'zeta', 'eta', 'theta', 'iota', 'kappa', 'lambda',
+    'mu', 'nu', 'xi', 'omicron', 'pi', 'rho', 'sigma',
+    'tau', 'upsilon', 'phi', 'chi', 'psi', 'omega'
+    ]
+greek_name = [
+    'άλφα', 'βήτα', 'γάμμα', 'δέλτα', 'έψιλον',
+    'ζήτα', 'ήτα', 'θήτα', 'ιώτα', 'κάππα', 'λάμβδα',
+    'μυ', 'νυ', 'ξι', 'όμικρον', 'πι', 'ρώ', 'σίγμα', 
+    'ταυ', 'ύψιλον', 'φι', 'χι', 'ψι', 'ωμέγα'
+    ]
+lower_case_alphabet = [
+    'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 
+    'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο', 'π', 
+    'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω'
+    ]
+upper_case_alphabet = [
+    'Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ',
+    'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π',
+    'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω'
+    ]
+
+parser = argparse.ArgumentParser()
+group = parser.add_mutually_exclusive_group()
+group.add_argument('-p', '--printout', 
+                    action='store_true',
+                    help='return full Greek alphabet')
+group.add_argument('-e', '--english', 
+                    type=str, 
+                    metavar='', 
+                    help='return the Greek alphabet letter and name for given \
+                        English alphabet letter name')
+group.add_argument('-o', '--ordinal', 
+                    type=int, 
+                    metavar='', 
+                    help='return the Greek alphabet letter and name for given \
+                        ordinal number of the letter')
+def main():
+    try:
+        if len(sys.argv[1:])==0:
+            parser.print_help()
+            parser.exit()
+        args = parser.parse_args()
+    except SystemExit:
+        return
+
+    if args.printout:
+        for idx, value in enumerate(zip(lower_case_alphabet, upper_case_alphabet,
+                                        english_name, greek_name)):
+            print(f'{idx+1}.\t{value[0]}\t{value[1]}\t{value[2]} [{value[3]}]')  
+    elif args.english:
+        if args.english not in english_name:
+            raise ValueError(f'Invalid name. Try something from this list: {english_name}')
+        letter_idx = english_name.index(args.english)
+        print(f'Ordinal number in alphabet: \t {letter_idx + 1}')
+        print(f'Lower case alphabet symbol: \t {lower_case_alphabet[letter_idx]} ')
+        print(f'Upper case alphabet symbol: \t {upper_case_alphabet[letter_idx]} ')
+        print(f'Greek alphabet letter name: \t {greek_name[letter_idx]} ')
+    elif args.ordinal:
+        letter_idx = args.ordinal - 1
+        if letter_idx not in range(len(lower_case_alphabet)):
+            raise ValueError(f'Choose ordinal number between 1 and {len(lower_case_alphabet)}')
+        print(f'Lower case alphabet symbol: \t {lower_case_alphabet[letter_idx]} ')
+        print(f'Upper case alphabet symbol: \t {upper_case_alphabet[letter_idx]} ')
+        print(f'Greek alphabet letter name: \t {greek_name[letter_idx]} ')
+        print(f'English alphabet letter name: \t {english_name[letter_idx]} ')
+
+if __name__ == "__main__":
+    main()
+
